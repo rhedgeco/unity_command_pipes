@@ -9,7 +9,7 @@ public class ExampleServerBehaviour : MonoBehaviour
     // store the pipe for access later
     private CommandPipeServer _pipeServer;
     
-    private void Start()
+    private void Awake()
     {
         // create the pipe server whenever necessary
         // will start listening automatically, unless otherwise specified with optional start variable
