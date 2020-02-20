@@ -11,6 +11,7 @@ namespace UnityCommandPipes
     public class CommandPipeClient : IDisposable
     {
         private NamedPipeClientStream _client;
+        private StreamWriter _writer;
 
         /// <summary>
         /// Name of the pipe
@@ -26,6 +27,7 @@ namespace UnityCommandPipes
         {
             Id = id;
             _client = new NamedPipeClientStream(Id);
+            _writer = new StreamWriter(_client);
             if (connect) ConnectToServer();
         }
 
@@ -46,10 +48,8 @@ namespace UnityCommandPipes
         /// <remarks>Will fail if not connected already</remarks>
         public void SendCommand(string command)
         {
-            using (StreamWriter writer = new StreamWriter(_client))
-            {
-                writer.WriteLine(command);
-            }
+            _writer.WriteLine(command);
+            _writer.Flush();
         }
 
         /// <summary>
@@ -59,6 +59,7 @@ namespace UnityCommandPipes
         public void Dispose()
         {
             _client.Close();
+            _writer.Close();
         }
     }
 }
